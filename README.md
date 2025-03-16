@@ -102,6 +102,160 @@ mvn spring-boot:run
   - Swagger UI: http://localhost:8080/swagger-ui/index.html
   - OpenAPI JSON: http://localhost:8080/v3/api-docs
 
+## <code><img width="25" src="https://raw.githubusercontent.com/marwin1991/profile-technology-icons/refs/heads/main/icons/swagger.png" alt="Swagger" title="Swagger"/></code> Tutorial: Como Testar o Projeto com Swagger
+<details>
+
+### 1. Acessando o Swagger UI
+
+1. Execute o projeto Spring Boot (`mvn clean spring-boot:run`)
+2. Abra seu navegador e acesse: http://localhost:8080/swagger-ui/index.html
+3. Você verá a interface do Swagger organizada com os seguintes grupos de endpoints:
+   - **Autenticação** - Login e registro
+   - **Produtos** - Gerenciamento de produtos
+   - **Pedidos** - Gerenciamento de pedidos
+   - **Consultas Otimizadas** - Análises e relatórios
+
+### 2. Autenticação
+
+Para acessar endpoints protegidos, primeiro você precisa se autenticar:
+
+1. Expanda a seção **Autenticação**
+2. Clique no endpoint `POST /api/auth/login`
+3. Clique em "Try it out"
+4. No campo "Request body", insira as credenciais:
+   ```json
+   {
+     "username": "exemplo",
+     "password": "12345678"
+   }
+   ```
+   *(Ou use as credenciais: user/123456, johndoe/123456, janesmith/123456)*
+5. Clique em "Execute"
+6. Na resposta, copie o token JWT (sem as aspas) da seção "Response body":
+   ```json
+   {
+     "token": "eyJhbGciOiJIUzI1NiJ9..."
+   }
+   ```
+7. Clique no botão "Authorize" (cadeado) no topo da página
+8. No campo "Value", digite o token copiado
+9. Clique em "Authorize" e depois em "Close"
+
+Agora você está autenticado e pode acessar endpoints protegidos!
+
+### 3. Testando Endpoints de Produtos
+
+#### 3.1 Listar Todos os Produtos
+1. Expanda a seção **Produtos**
+2. Clique no endpoint `GET /api/products`
+3. Clique em "Try it out" e depois em "Execute"
+4. Observe a lista de produtos retornada
+
+#### 3.2 Buscar Produto por ID
+1. Na seção **Produtos**, localize `GET /api/products/{id}`
+2. Clique em "Try it out"
+3. No campo "id", insira o UUID de um produto (você pode obter isso da lista anterior)
+4. Clique em "Execute"
+5. Observe os detalhes do produto específico
+
+#### 3.3 Buscar por Categoria
+1. Localize `GET /api/products/category/{category}`
+2. Clique em "Try it out"
+3. Digite uma categoria (ex: "Eletrônicos")
+4. Clique em "Execute"
+5. Veja a lista de produtos da categoria especificada
+
+#### 3.4 Criar Novo Produto (requer Admin)
+1. Localize `POST /api/products`
+2. Clique em "Try it out"
+3. No campo Request body, insira um novo produto:
+   ```json
+   {
+     "name": "Novo Produto Teste",
+     "description": "Descrição do produto teste",
+     "price": 199.99,
+     "category": "Testes",
+     "stockQuantity": 50
+   }
+   ```
+4. Clique em "Execute"
+5. Confirme que o produto foi criado com sucesso (código 201)
+
+### 4. Testando Endpoints de Pedidos
+
+#### 4.1 Listar Meus Pedidos
+1. Expanda a seção **Pedidos**
+2. Clique no endpoint `GET /api/orders`
+3. Clique em "Try it out" e depois em "Execute"
+4. Observe seus pedidos atuais
+
+#### 4.2 Criar Novo Pedido
+1. Localize `POST /api/orders`
+2. Clique em "Try it out"
+3. Insira os dados do pedido:
+   ```json
+   {
+     "items": [
+       {
+         "productId": "ID-DO-PRODUTO-AQUI",
+         "quantity": 2
+       }
+     ]
+   }
+   ```
+   (Substitua "ID-DO-PRODUTO-AQUI" por um ID real de produto)
+4. Clique em "Execute"
+5. Verifique se o pedido foi criado com sucesso
+
+#### 4.3 Processar Pagamento
+1. Localize `POST /api/orders/{id}/payment`
+2. Clique em "Try it out"
+3. Insira o ID do pedido que acabou de criar
+4. Clique em "Execute"
+5. Confirme que o pagamento foi processado (o status deve mudar para "PAID")
+
+#### 4.4 Ver Todos os Pedidos (Admin)
+1. Localize `GET /api/orders/admin/all`
+2. Clique em "Try it out" e depois em "Execute"
+3. Como administrador, você poderá ver todos os pedidos do sistema
+
+### 5. Testando Análises (Admin)
+
+#### 5.1 Top 5 Usuários
+1. Expanda a seção **Consultas Otimizadas**
+2. Clique no endpoint `GET /api/analytics/top-users`
+3. Clique em "Try it out" e depois em "Execute"
+4. Veja os 5 usuários que mais gastaram na plataforma
+
+#### 5.2 Valor Médio de Pedidos
+1. Localize `GET /api/analytics/average-order-value`
+2. Clique em "Try it out" e depois em "Execute"
+3. Observe o valor médio dos pedidos por usuário
+
+#### 5.3 Faturamento Mensal
+1. Localize `GET /api/analytics/monthly-revenue`
+2. Clique em "Try it out"
+3. Insira o ano e mês desejados (ex: ano=2023, mês=3)
+4. Clique em "Execute"
+5. Veja o faturamento total para o período especificado
+
+### Dicas Adicionais
+
+- **Códigos de resposta**: Observe sempre os códigos HTTP retornados:
+  - 200/201: Sucesso
+  - 400: Erro nos dados enviados
+  - 401/403: Erro de autenticação/autorização 
+  - 404: Recurso não encontrado
+
+- **Token expirado**: Se receber erro 401, seu token pode ter expirado. Faça login novamente.
+
+- **Usuários de teste**:
+  - admin/123456 (ADMIN): Acesso a todos os endpoints
+  - user/123456 (USER): Acesso limitado
+  - johndoe/123456 (USER): Acesso limitado
+  - janesmith/123456 (USER): Acesso limitado
+</details>
+
 ## 📊 Dados de exemplo
 
 O sistema é automaticamente populado com dados de exemplo para testes:
