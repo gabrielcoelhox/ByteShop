@@ -9,5 +9,4 @@ public class ByteShopApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(ByteShopApplication.class, args);
 	}
-
 }
