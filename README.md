@@ -19,6 +19,8 @@ Este projeto foi desenvolvido como desafio de avaliação para a vaga de desenvo
 - CRUD completo de produtos.
 - Gerenciamento de pedidos com regras específicas.
 - Otimização de queries SQL para melhor performance.
+- Dois perfis de usuário: ADMIN e USER
+- Documentação interativa com Swagger UI
 
 ## <a id="id2">📌 Regras de negócio </a>
 
@@ -95,7 +97,13 @@ mvn clean install
 mvn spring-boot:run
 ```
 
+5. **Acesse a documentação Swagger**
+- Após iniciar o projeto, acesse:
+  - Swagger UI: http://localhost:8080/swagger-ui/index.html
+  - OpenAPI JSON: http://localhost:8080/v3/api-docs
+
 ## 📌 Endpoints da API
+Você pode explorar todos os endpoints através da interface do Swagger UI, mas aqui estão os principais:
 
 ### Autenticação
 ```
@@ -172,6 +180,7 @@ SHOW TABLES;
 - **Erro de conexão MySQL**: Verifique se o serviço está rodando
 - **Erro de porta**: Verifique se a porta 8080 está livre
 - **Erro de autenticação**: Verifique as credenciais do MySQL no application.properties
+- **Swagger não abre**: Verifique se a aplicação está rodando e se a URL está correta
 
 ## 🛠️ Tecnologias Utilizadas
 
@@ -182,3 +191,8 @@ SHOW TABLES;
 - JPA/Hibernate
 - Maven
 - Lombok
+- Swagger/OpenAPI
+
+## 📄 Licença
+
+Este projeto está sob a licença MIT - veja o arquivo [LICENSE.md](LICENSE.md) para detalhes.
