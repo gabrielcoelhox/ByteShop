@@ -6,23 +6,49 @@ import gabrielcoelhox.com.github.model.Product;
 import gabrielcoelhox.com.github.repository.ProductRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class ProductService {
 
     private final ProductRepository productRepository;
 
     public List<ProductDTO> getAllProducts() {
-        return productRepository.findAll().stream()
+        log.info("Buscando todos os produtos no banco de dados");
+        List<Product> products = productRepository.findAll();
+        log.info("Encontrados {} produtos no banco de dados", products.size());
+        
+        // Se não encontrar produtos, insere um produto de teste
+        if (products.isEmpty()) {
+            log.warn("Nenhum produto encontrado. Inserindo produto de teste.");
+            Product testProduct = createTestProduct();
+            products.add(testProduct);
+        }
+        
+        return products.stream()
                 .map(this::mapToDTO)
                 .collect(Collectors.toList());
+    }
+
+    private Product createTestProduct() {
+        log.info("Criando produto de teste...");
+        Product product = new Product();
+        product.setName("Produto de Teste");
+        product.setDescription("Este é um produto de teste criado automaticamente");
+        product.setPrice(BigDecimal.valueOf(99.90));
+        product.setCategory("Teste");
+        product.setStockQuantity(10);
+        
+        return productRepository.save(product);
     }
 
     public ProductDTO getProductById(UUID id) {

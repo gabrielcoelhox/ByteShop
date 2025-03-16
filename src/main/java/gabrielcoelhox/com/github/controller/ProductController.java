@@ -5,6 +5,7 @@ import gabrielcoelhox.com.github.dto.product.ProductRequest;
 import gabrielcoelhox.com.github.service.ProductService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -16,13 +17,17 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/api/products")
 @RequiredArgsConstructor
+@Slf4j
 public class ProductController {
 
     private final ProductService productService;
 
     @GetMapping
     public ResponseEntity<List<ProductDTO>> getAllProducts() {
-        return ResponseEntity.ok(productService.getAllProducts());
+        log.info("Requisição para listar todos os produtos");
+        List<ProductDTO> products = productService.getAllProducts();
+        log.info("Retornando {} produtos", products.size());
+        return ResponseEntity.ok(products);
     }
 
     @GetMapping("/{id}")

@@ -21,7 +21,8 @@ public class JwtService {
     @Value("${jwt.secret}")
     private String secretKey;
 
-    @Value("${jwt.expiration}")
+    // Valor padrão de 24 horas em milissegundos em caso de erro na injeção
+    @Value("${jwt.expiration:86400000}")
     private long jwtExpiration;
 
     // Extrai o username do token
@@ -43,21 +44,12 @@ public class JwtService {
             Map<String, Object> extraClaims,
             UserDetails userDetails
     ) {
-        return buildToken(extraClaims, userDetails, jwtExpiration);
-    }
-
-    // Gera um token com as claims("permissões") e o usuário
-    private String buildToken(
-            Map<String, Object> extraClaims,
-            UserDetails userDetails,
-            long expiration
-    ) {
         return Jwts
                 .builder()
                 .setClaims(extraClaims)
                 .setSubject(userDetails.getUsername())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + expiration))
+                .setExpiration(new Date(System.currentTimeMillis() + jwtExpiration))
                 .signWith(getSignInKey(), SignatureAlgorithm.HS256)
                 .compact();
     }
@@ -86,6 +78,10 @@ public class JwtService {
 
     private Key getSignInKey() {
         byte[] keyBytes = Decoders.BASE64.decode(secretKey);
+        // Verificar se a chave tem pelo menos 256 bits (32 bytes)
+        if (keyBytes.length < 32) {
+            throw new IllegalArgumentException("A chave secreta JWT deve ter pelo menos 256 bits (32 bytes)");
+        }
         return Keys.hmacShaKeyFor(keyBytes);
     }
 }
