@@ -27,28 +27,9 @@ public class ProductService {
         List<Product> products = productRepository.findAll();
         log.info("Encontrados {} produtos no banco de dados", products.size());
         
-        // Se não encontrar produtos, insere um produto de teste
-        if (products.isEmpty()) {
-            log.warn("Nenhum produto encontrado. Inserindo produto de teste.");
-            Product testProduct = createTestProduct();
-            products.add(testProduct);
-        }
-        
         return products.stream()
                 .map(this::mapToDTO)
                 .collect(Collectors.toList());
-    }
-
-    private Product createTestProduct() {
-        log.info("Criando produto de teste...");
-        Product product = new Product();
-        product.setName("Produto de Teste");
-        product.setDescription("Este é um produto de teste criado automaticamente");
-        product.setPrice(BigDecimal.valueOf(99.90));
-        product.setCategory("Teste");
-        product.setStockQuantity(10);
-        
-        return productRepository.save(product);
     }
 
     public ProductDTO getProductById(UUID id) {
