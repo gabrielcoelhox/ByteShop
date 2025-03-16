@@ -102,6 +102,32 @@ mvn spring-boot:run
   - Swagger UI: http://localhost:8080/swagger-ui/index.html
   - OpenAPI JSON: http://localhost:8080/v3/api-docs
 
+## 📊 Dados de exemplo
+
+O sistema é automaticamente populado com dados de exemplo para testes:
+
+### Usuários
+| Username | Senha | Perfil | Nome |
+|----------|-------|--------|-------|
+| admin | 123456 | ADMIN | Admin User |
+| user | 123456 | USER | Normal User |
+| arrascaeta | 123456 | USER | Arrascaeta |
+| brunohenrique | 123456 | USER | Bruno Henrique |
+| neymar | 123456 | ADMIN | Neymar |
+
+### Produtos
+O sistema inclui 10 produtos de exemplo em diversas categorias:
+- Eletrônicos (Smartphone, Notebook)
+- Periféricos (Mouse, Teclado, Webcam)
+- Monitores
+- Armazenamento (SSD)
+- Áudio (Headset)
+- Redes (Roteador)
+- Móveis (Cadeira Gamer)
+
+### Pedidos
+Há alguns pedidos de exemplo com status "COMPLETED" e "PENDING" para demonstrar o fluxo de trabalho.
+
 ## 📌 Endpoints da API
 Você pode explorar todos os endpoints através da interface do Swagger UI, mas aqui estão os principais:
 
