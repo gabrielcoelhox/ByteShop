@@ -26,7 +26,7 @@ public class ProductService {
         log.info("Buscando todos os produtos no banco de dados");
         List<Product> products = productRepository.findAll();
         log.info("Encontrados {} produtos no banco de dados", products.size());
-        
+
         return products.stream()
                 .map(this::mapToDTO)
                 .collect(Collectors.toList());

@@ -35,6 +35,12 @@ public class OrderService {
                 .collect(Collectors.toList());
     }
 
+    public List<OrderDTO> getAllOrders() {
+        return orderRepository.findAll().stream()
+                .map(this::mapToDTO)
+                .collect(Collectors.toList());
+    }
+
     public OrderDTO getOrderById(UUID id, User user) {
         Order order = orderRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Order not found with id: " + id));

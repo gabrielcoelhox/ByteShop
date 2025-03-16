@@ -1,3 +1,14 @@
+-- Verifica se existem produtos antes de limpar as tabelas
+SET @product_count = (SELECT COUNT(*) FROM products);
+
+-- Apenas limpar as tabelas se não houver produtos cadastrados
+SET @do_insert = IF(@product_count = 0, 1, 0);
+
+-- Condiciona a limpeza e inserção com base na verificação
+SET SQL_SAFE_UPDATES = 0;
+DELETE FROM products WHERE @do_insert = 1;
+DELETE FROM users WHERE @do_insert = 1;
+
 -- Limpar tabelas para garantir inserção limpa
 SET SQL_SAFE_UPDATES = 0;
 DELETE FROM products;
