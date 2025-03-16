@@ -17,13 +17,9 @@ import io.swagger.v3.oas.annotations.servers.Server;
                         email = "gabriel.coelhox@gmail.com",
                         url = "https://github.com/gabrielcoelhox"
                 ),
-                description = "Swagger Api - Documentação para o ByteShop",
+                description = "Documentação para a loja ByteShop",
                 title = "Swagger Api - ByteShop",
                 version = "1.0",
-                license = @License(
-                        name = "MIT Licence",
-                        url = "https://github.com/gabrielcoelhox/ByteShop/blob/main/LICENSE.md"
-                )
         ),
         servers = {
                 @Server(
