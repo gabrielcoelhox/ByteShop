@@ -23,7 +23,7 @@ Este projeto foi desenvolvido como desafio de avaliação para a vaga de desenvo
 ## <a id="id2">📌 Regras de negócio </a>
 
 <details>
-<summary><strong>Produtos</strong></summary>
+<summary><strong>🛍️ Produtos</strong></summary>
 Criar um CRUD completo para produtos com os seguintes campos:
 
 - ID (UUID)
