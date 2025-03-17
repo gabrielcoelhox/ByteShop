@@ -298,15 +298,16 @@ Este tutorial mostra como configurar, monitorar e testar o projeto ByteShop usan
 1. **Edite o arquivo de configuração** em `src/main/resources/application.properties`:
    ```properties
    # Conexão com MySQL
-   spring.datasource.url=jdbc:mysql://localhost:3306/byteshop?createDatabaseIfNotExist=true&useSSL=false&serverTimezone=UTC
+   spring.datasource.url=jdbc:mysql://localhost:3306/byteshop?createDatabaseIfNotExist=true&useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true&characterEncoding=UTF-8
    spring.datasource.username=byteshop_user
    spring.datasource.password=sua_senha
+   spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
 
    # JPA/Hibernate
    spring.jpa.hibernate.ddl-auto=update
-   spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.MySQLDialect
    spring.jpa.show-sql=true
    spring.jpa.properties.hibernate.format_sql=true
+   spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.MySQLDialect
 
    # Desabilitar o script data.sql
    spring.sql.init.mode=never

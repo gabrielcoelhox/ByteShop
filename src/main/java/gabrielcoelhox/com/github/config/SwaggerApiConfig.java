@@ -19,7 +19,7 @@ import io.swagger.v3.oas.annotations.servers.Server;
                 ),
                 description = "Documentação para a loja ByteShop",
                 title = "Swagger Api - ByteShop",
-                version = "1.0",
+                version = "1.0"
         ),
         servers = {
                 @Server(
