@@ -130,7 +130,7 @@ Para acessar endpoints protegidos, primeiro você precisa se autenticar:
      "password": "12345678"
    }
    ```
-   *(Ou use as credenciais: user/123456, johndoe/123456, janesmith/123456)*
+   *(Ou use as credenciais: user/123456, arrascaeta/123456, pedro/123456)*
 5. Clique em "Execute"
 6. Na resposta, copie o token JWT (sem as aspas) da seção "Response body":
    ```json
@@ -253,8 +253,8 @@ Agora você está autenticado e pode acessar endpoints protegidos!
 - **Usuários de teste**:
   - admin/123456 (ADMIN): Acesso a todos os endpoints
   - user/123456 (USER): Acesso limitado
-  - johndoe/123456 (USER): Acesso limitado
-  - janesmith/123456 (USER): Acesso limitado
+  - arrascaeta/123456 (USER): Acesso limitado
+  - pedro/123456 (USER): Acesso limitado
 </details>
 
 ## 🗄️ Tutorial: Como Testar o Projeto com MySQL
@@ -464,7 +464,7 @@ O sistema é automaticamente populado com dados de exemplo para testes:
 | admin | 123456 | ADMIN | Admin User |
 | user | 123456 | USER | Normal User |
 | arrascaeta | 123456 | USER | Arrascaeta |
-| brunohenrique | 123456 | USER | Bruno Henrique |
+| pedro | 123456 | USER | Pedro |
 | neymar | 123456 | ADMIN | Neymar |
 
 ### Produtos

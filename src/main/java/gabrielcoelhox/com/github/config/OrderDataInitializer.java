@@ -52,11 +52,11 @@ public class OrderDataInitializer implements CommandLineRunner {
         User user = userRepository.findByUsername("user").orElseThrow();
         
         // Verificar se existem usuários adicionais ou criar novos
-        User johndoe = userRepository.findByUsername("johndoe")
-            .orElseGet(() -> createUser("johndoe", "John Doe", "john@example.com"));
+        User arrascaeta = userRepository.findByUsername("arrascaeta")
+            .orElseGet(() -> createUser("arrascaeta", "Arrascaeta", "arrascaeta@flamengo.com"));
         
-        User janesmith = userRepository.findByUsername("janesmith")
-            .orElseGet(() -> createUser("janesmith", "Jane Smith", "jane@example.com"));
+        User pedro = userRepository.findByUsername("pedro")
+            .orElseGet(() -> createUser("pedro", "Pedro", "pedro@flamengo.com"));
 
         // Busca alguns produtos para adicionar aos pedidos
         List<Product> availableProducts = productRepository.findAll();
@@ -82,18 +82,18 @@ public class OrderDataInitializer implements CommandLineRunner {
                 new ProductQuantity(availableProducts.get(3 % availableProducts.size()), 1)
         ));
 
-        // Histórico de pedidos para johndoe
-        createCompletedOrder(johndoe, List.of(
+        // Histórico de pedidos para arrascaeta
+        createCompletedOrder(arrascaeta, List.of(
                 new ProductQuantity(availableProducts.get(4 % availableProducts.size()), 1),
                 new ProductQuantity(availableProducts.get(5 % availableProducts.size()), 2)
         ));
         
-        createCompletedOrder(johndoe, List.of(
+        createCompletedOrder(arrascaeta, List.of(
                 new ProductQuantity(availableProducts.get(0 % availableProducts.size()), 1)
         ));
 
-        // Histórico de pedidos para janesmith
-        createCompletedOrder(janesmith, List.of(
+        // Histórico de pedidos para pedro
+        createCompletedOrder(pedro, List.of(
                 new ProductQuantity(availableProducts.get(1 % availableProducts.size()), 2),
                 new ProductQuantity(availableProducts.get(3 % availableProducts.size()), 1)
         ));
@@ -109,7 +109,7 @@ public class OrderDataInitializer implements CommandLineRunner {
                 new ProductQuantity(availableProducts.get(1 % availableProducts.size()), 1)
         ));
         
-        createPendingOrder(janesmith, List.of(
+        createPendingOrder(pedro, List.of(
                 new ProductQuantity(availableProducts.get(2 % availableProducts.size()), 2)
         ));
 

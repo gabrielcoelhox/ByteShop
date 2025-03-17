@@ -22,10 +22,10 @@ INSERT INTO users (id, name, username, email, password, role, created_at, update
 VALUES (2, 'Normal User', 'user', 'user@byteshop.com', '$2a$10$yYQaJrHzjOgD5wWCyelp0ev9QZel4FYwlIYWupD.eIGGVaLPHSaIi', 'USER', NOW(), NOW());
 
 INSERT INTO users (id, name, username, email, password, role, created_at, updated_at)
-VALUES (3, 'Arrascaeta', 'johndoe', 'john@example.com', '$2a$10$yYQaJrHzjOgD5wWCyelp0ev9QZel4FYwlIYWupD.eIGGVaLPHSaIi', 'USER', NOW(), NOW());
+VALUES (3, 'Arrascaeta', 'arrascaeta', 'arrascaeta@flamengo.com', '$2a$10$yYQaJrHzjOgD5wWCyelp0ev9QZel4FYwlIYWupD.eIGGVaLPHSaIi', 'USER', NOW(), NOW());
 
 INSERT INTO users (id, name, username, email, password, role, created_at, updated_at)
-VALUES (4, 'Bruno Henrique', 'janesmith', 'jane@example.com', '$2a$10$yYQaJrHzjOgD5wWCyelp0ev9QZel4FYwlIYWupD.eIGGVaLPHSaIi', 'USER', NOW(), NOW());
+VALUES (4, 'Pedro', 'pedro', 'pedro@flamengo.com', '$2a$10$yYQaJrHzjOgD5wWCyelp0ev9QZel4FYwlIYWupD.eIGGVaLPHSaIi', 'USER', NOW(), NOW());
 
 INSERT INTO users (id, name, username, email, password, role, created_at, updated_at)
 VALUES (5, 'Neymar', 'manager', 'manager@byteshop.com', '$2a$10$yYQaJrHzjOgD5wWCyelp0ev9QZel4FYwlIYWupD.eIGGVaLPHSaIi', 'ADMIN', NOW(), NOW());
