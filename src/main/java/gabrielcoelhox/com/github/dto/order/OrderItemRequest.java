@@ -6,16 +6,14 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.UUID;
-
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class OrderItemRequest {
-    @NotNull(message = "Product ID is required")
-    private UUID productId;
+    @NotNull(message = "Product ID é obrigatório")
+    private Long productId;
 
-    @NotNull(message = "Quantity is required")
-    @Positive(message = "Quantity must be positive")
+    @NotNull(message = "Quantidade é obrigatória")
+    @Positive(message = "Quantidade deve ser positiva")
     private Integer quantity;
 }

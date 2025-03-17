@@ -1,10 +1,10 @@
 package gabrielcoelhox.com.github.service;
 
-import gabrielcoelhox.com.github.dto.UserDTO;
-import gabrielcoelhox.com.github.dto.auth.AuthRequest;
-import gabrielcoelhox.com.github.dto.auth.AuthResponse;
+import gabrielcoelhox.com.github.dto.auth.AuthenticationRequest;
+import gabrielcoelhox.com.github.dto.auth.AuthenticationResponse;
 import gabrielcoelhox.com.github.dto.auth.RegisterRequest;
 import gabrielcoelhox.com.github.model.User;
+import gabrielcoelhox.com.github.model.UserRole;
 import gabrielcoelhox.com.github.repository.UserRepository;
 import gabrielcoelhox.com.github.security.JwtService;
 import lombok.RequiredArgsConstructor;
@@ -22,13 +22,13 @@ public class AuthService {
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
 
-    public AuthResponse register(RegisterRequest request) {
+    public AuthenticationResponse register(RegisterRequest request) {
         if (userRepository.existsByUsername(request.getUsername())) {
-            throw new IllegalArgumentException("Username already exists. Please choose a different username");
+            throw new IllegalArgumentException("Este username já está em uso");
         }
 
         if (userRepository.existsByEmail(request.getEmail())) {
-            throw new IllegalArgumentException("Email already exists. Please choose a different email");
+            throw new IllegalArgumentException("Este email já está em uso");
         }
 
         var user = User.builder()
@@ -36,17 +36,18 @@ public class AuthService {
                 .password(passwordEncoder.encode(request.getPassword()))
                 .name(request.getName())
                 .email(request.getEmail())
-                .role(request.getRole())
+                .role(request.getRole() != null ? request.getRole() : UserRole.USER)
                 .build();
 
         userRepository.save(user);
 
-        var jwt = jwtService.generateToken(user);
-
-        return new AuthResponse(jwt, mapToDTO(user));
+        var jwtToken = jwtService.generateToken(user);
+        return AuthenticationResponse.builder()
+                .token(jwtToken)
+                .build();
     }
 
-    public AuthResponse authenticate(AuthRequest request) {
+    public AuthenticationResponse authenticate(AuthenticationRequest request) {
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         request.getUsername(),
@@ -55,20 +56,11 @@ public class AuthService {
         );
 
         var user = userRepository.findByUsername(request.getUsername())
-                .orElseThrow(() -> new IllegalArgumentException("Invalid username or password"));
+                .orElseThrow(() -> new IllegalArgumentException("Username ou senha inválidos"));
 
-        var jwt = jwtService.generateToken(user);
-
-        return new AuthResponse(jwt, mapToDTO(user));
-    }
-
-    private UserDTO mapToDTO(User user) {
-        return new UserDTO(
-                user.getId(),
-                user.getUsername(),
-                user.getName(),
-                user.getEmail(),
-                user.getRole()
-        );
+        var jwtToken = jwtService.generateToken(user);
+        return AuthenticationResponse.builder()
+                .token(jwtToken)
+                .build();
     }
 }

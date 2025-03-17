@@ -8,14 +8,13 @@ import lombok.NoArgsConstructor;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.UUID;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class OrderDTO {
-    private UUID id;
-    private UUID userId;
+    private Long id;
+    private Long userId;
     private String userName;
     private List<OrderItemDTO> items;
     private OrderStatus status;

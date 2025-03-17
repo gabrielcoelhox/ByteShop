@@ -5,13 +5,12 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
-import java.util.UUID;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class AverageOrderValueDTO {
-    private UUID userId;
+    private Long userId;
     private String name;
     private String email;
     private BigDecimal averageOrderValue;

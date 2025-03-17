@@ -373,6 +373,8 @@ Este tutorial mostra como configurar, monitorar e testar o projeto ByteShop usan
 Teste as mesmas consultas otimizadas implementadas na aplicação:
 
 1. **Top 5 usuários que mais gastaram**:
+
+Se quiser visualizar outro status, altere o campo PAID para `PENDING` ou `CANCELED`
    ```sql
    SELECT u.id, u.name, u.email, COUNT(o.id) as order_count, SUM(o.total_amount) as total_spent 
    FROM users u 
@@ -384,6 +386,7 @@ Teste as mesmas consultas otimizadas implementadas na aplicação:
    ```
 
 2. **Valor médio dos pedidos por usuário**:
+Se quiser visualizar outro status, altere o campo PAID para `PENDING` ou `CANCELED`
    ```sql
    SELECT u.id, u.name, u.email, AVG(o.total_amount) as average_order_value 
    FROM users u 
@@ -393,22 +396,24 @@ Teste as mesmas consultas otimizadas implementadas na aplicação:
    ```
 
 3. **Faturamento mensal** (substitua ANO e MÊS pelos valores desejados):
+Se quiser visualizar outro status, altere o campo PAID para `PENDING` ou `CANCELED`
    ```sql
    SELECT SUM(total_amount) as revenue
    FROM orders
    WHERE status = 'PAID'
    AND YEAR(paid_at) = ANO AND MONTH(paid_at) = MÊS;
+   # Substitua o campo ANO e MÊS pelos valores que deseja realizar a pesquisa
    ```
 
-6. **Monitore Operações em Tempo Real
+4. **Monitore Operações em Tempo Real
 
-1. **Ative o log de consultas** (opcional):
+5. **Ative o log de consultas** (opcional):
    ```sql
    SET GLOBAL general_log = 'ON';
    SET GLOBAL log_output = 'TABLE';
    ```
 
-2. **Visualize as consultas recentes**:
+6. **Visualize as consultas recentes**:
    ```sql
    SELECT event_time, command_type, argument 
    FROM mysql.general_log 
@@ -416,27 +421,27 @@ Teste as mesmas consultas otimizadas implementadas na aplicação:
    LIMIT 20;
    ```
 
-3. **Execute operações na API** usando o Swagger ou outras ferramentas e observe as consultas correspondentes no log.
+7. **Execute operações na API** usando o Swagger ou outras ferramentas e observe as consultas correspondentes no log.
 
-7. *Teste Transações e Integridade de Dados*
+8. *Teste Transações e Integridade de Dados*
 
-1. **Crie um novo pedido** via Swagger (veja o tutorial anterior)
+9.  **Crie um novo pedido** via Swagger (veja o tutorial anterior)
 
-2. **Verifique se o pedido foi criado no banco**:
+10. **Verifique se o pedido foi criado no banco**:
    ```sql
    SELECT * FROM orders ORDER BY created_at DESC LIMIT 1;
    SELECT * FROM order_items WHERE order_id = 'ID_DO_PEDIDO_CRIADO';
    ```
 
-3. *Processe o pagamento do pedido** via Swagger
+11. *Processe o pagamento do pedido** via Swagger
 
-4. **Verifique se o estoque foi atualizado**:
+12. **Verifique se o estoque foi atualizado**:
    ```sql
    SELECT name, stock_quantity FROM products WHERE id IN 
    (SELECT product_id FROM order_items WHERE order_id = 'ID_DO_PEDIDO_PAGO');
    ```
 
-8. *Dicas e Solução de Problemas*
+13. *Dicas e Solução de Problemas*
 
 - **Falha na conexão**: Verifique se o serviço MySQL está rodando (`sudo systemctl status mysql`)
 - **Erro de acesso**: Confirme nome de usuário e senha no `application.properties`

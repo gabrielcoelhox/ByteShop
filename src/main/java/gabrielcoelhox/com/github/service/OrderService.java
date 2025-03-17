@@ -41,12 +41,12 @@ public class OrderService {
                 .collect(Collectors.toList());
     }
 
-    public OrderDTO getOrderById(UUID id, User user) {
+    public OrderDTO getOrderById(Long id, User user) {
         Order order = orderRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Order not found with id: " + id));
+                .orElseThrow(() -> new EntityNotFoundException("Pedido não encontrado com o id: " + id));
 
         if (!order.getUser().getId().equals(user.getId()) && user.getRole() != UserRole.ADMIN) {
-            throw new IllegalStateException("You don't have permission to view this order");
+            throw new IllegalStateException("Você não tem permissão para visualizar este pedido");
         }
         return mapToDTO(order);
     }
@@ -56,7 +56,7 @@ public class OrderService {
         // Verificar estoque antes de criar o pedido
         for (OrderItemRequest itemRequest : request.getItems()) {
             if (!productService.hasEnoughStock(itemRequest.getProductId(), itemRequest.getQuantity())) {
-                throw new IllegalStateException("Not enough stock for product with id: " + itemRequest.getProductId());
+                throw new IllegalStateException("Estoque insuficiente para o produto com o id: " + itemRequest.getProductId());
             }
         }
 
@@ -77,7 +77,7 @@ public class OrderService {
         // Adiciona o item do pedido à lista
         for (OrderItemRequest itemRequest : request.getItems()) {
             Product product = productRepository.findById(itemRequest.getProductId())
-                    .orElseThrow(() -> new EntityNotFoundException("Product not found with id: " + itemRequest.getProductId()));
+                    .orElseThrow(() -> new EntityNotFoundException("Produto não encontrado com o id: " + itemRequest.getProductId()));
 
             OrderItem orderItem = new OrderItem();
             orderItem.setOrder(savedOrder);
@@ -97,17 +97,17 @@ public class OrderService {
     }
 
     @Transactional
-    public OrderDTO processPayment(UUID orderId, User user) {
+    public OrderDTO processPayment(Long orderId, User user) {
         Order order = orderRepository.findById(orderId)
-                .orElseThrow(() -> new EntityNotFoundException("Order not found with id: " + orderId));
+                .orElseThrow(() -> new EntityNotFoundException("Pedido não encontrado com o id: " + orderId));
 
         if (!order.getUser().getId().equals(user.getId()) && user.getRole() != UserRole.ADMIN) {
-            throw new IllegalStateException("You don't have permission to pay this order");
+            throw new IllegalStateException("Você não tem permissão para pagar este pedido");
         }
 
         // Se o pedido não estiver como PENDING, lança uma exceção
         if (order.getStatus() != OrderStatus.PENDING) {
-            throw new IllegalStateException("Order is not in PENDING status");
+            throw new IllegalStateException("O pedido não está em status PENDING");
         }
 
         // Verifica o estoque novamente antes de processar o pagamento
@@ -122,7 +122,7 @@ public class OrderService {
                 order.setCanceledAt(LocalDateTime.now());
                 orderRepository.save(order);
 
-                throw new IllegalStateException("Not enough stock for product: " + item.getProduct().getName());
+                throw new IllegalStateException("Estoque insuficiente para o produto: " + item.getProduct().getName());
             }
         }
 
@@ -138,16 +138,16 @@ public class OrderService {
     }
 
     @Transactional
-    public OrderDTO cancelOrder(UUID orderId, User user) {
+    public OrderDTO cancelOrder(Long orderId, User user) {
         Order order = orderRepository.findById(orderId)
-                .orElseThrow(() -> new EntityNotFoundException("Order not found with id: " + orderId));
+                .orElseThrow(() -> new EntityNotFoundException("Pedido não encontrado com o id: " + orderId));
 
         if (!order.getUser().getId().equals(user.getId()) && user.getRole() != UserRole.ADMIN) {
-            throw new IllegalStateException("You don't have permission to cancel this order");
+            throw new IllegalStateException("Você não tem permissão para cancelar este pedido");
         }
 
         if (order.getStatus() != OrderStatus.PENDING) {
-            throw new IllegalStateException("Only PENDING orders can be canceled");
+            throw new IllegalStateException("Apenas pedidos PENDING podem ser cancelados");
         }
 
         order.setStatus(OrderStatus.CANCELED);

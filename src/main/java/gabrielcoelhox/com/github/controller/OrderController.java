@@ -26,7 +26,7 @@ import java.util.UUID;
 @RequestMapping("/api/orders")
 @RequiredArgsConstructor
 @Slf4j
-@Tag(name = "Pedidos", description = "Operações relacionadas a pedidos")
+@Tag(name = "Pedidos", description = "Endpoints relacionadas a pedidos")
 public class OrderController {
 
     private final OrderService orderService;
@@ -47,24 +47,21 @@ public class OrderController {
 
     @GetMapping("/{id}")
     @Operation(
-        summary = "Buscar pedido por ID",
-        description = "Retorna os detalhes de um pedido específico do usuário autenticado"
-    )
+        summary = "Buscar pedido por ID", 
+        description = "Retorna os detalhes de um pedido específico do usuário autenticado")
     @ApiResponse(
         responseCode = "200", 
-        description = "Pedido encontrado com sucesso"
-    )
+        description = "Pedido encontrado com sucesso", 
+        content = @Content(schema = @Schema(implementation = OrderDTO.class)))
     @ApiResponse(
         responseCode = "403", 
         description = "Usuário não tem permissão para visualizar este pedido"
     )
     @ApiResponse(
         responseCode = "404", 
-        description = "Pedido não encontrado"
-    )
+        description = "Pedido não encontrado")
     public ResponseEntity<OrderDTO> getOrderById(
-            @Parameter(description = "ID único do pedido") 
-            @PathVariable UUID id, 
+            @Parameter(description = "Order ID") @PathVariable Long id,
             @AuthenticationPrincipal User user) {
         return ResponseEntity.ok(orderService.getOrderById(id, user));
     }
@@ -99,7 +96,7 @@ public class OrderController {
         responseCode = "400", 
         description = "Pedido não está pendente ou estoque insuficiente"
     )
-    public ResponseEntity<OrderDTO> processPayment(@PathVariable UUID id, @AuthenticationPrincipal User user) {
+    public ResponseEntity<OrderDTO> processPayment(@PathVariable Long id, @AuthenticationPrincipal User user) {
         return ResponseEntity.ok(orderService.processPayment(id, user));
     }
 
@@ -116,7 +113,7 @@ public class OrderController {
         responseCode = "400", 
         description = "Pedido não pode ser cancelado"
     )
-    public ResponseEntity<OrderDTO> cancelOrder(@PathVariable UUID id, @AuthenticationPrincipal User user) {
+    public ResponseEntity<OrderDTO> cancelOrder(@PathVariable Long id, @AuthenticationPrincipal User user) {
         return ResponseEntity.ok(orderService.cancelOrder(id, user));
     }
 

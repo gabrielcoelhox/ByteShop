@@ -18,13 +18,12 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/products")
 @RequiredArgsConstructor
 @Slf4j
-@Tag(name = "Produtos", description = "Operações relacionadas a produtos")
+@Tag(name = "Produtos", description = "Endpoints relacionadas a produtos")
 public class ProductController {
 
     private final ProductService productService;
@@ -61,8 +60,7 @@ public class ProductController {
         description = "Produto não encontrado"
     )
     public ResponseEntity<ProductDTO> getProductById(
-            @Parameter(description = "ID único do produto (formato UUID)", example = "123e4567-e89b-12d3-a456-426614174000")
-            @PathVariable UUID id) {
+            @Parameter(description = "Product ID") @PathVariable Long id) {
         return ResponseEntity.ok(productService.getProductById(id));
     }
 
@@ -103,6 +101,7 @@ public class ProductController {
     }
 
     @PostMapping
+    @PreAuthorize("hasRole('ADMIN')")
     @Operation(
         summary = "Criar novo produto",
         description = "Cria um novo produto na loja"
@@ -116,15 +115,19 @@ public class ProductController {
         responseCode = "400",
         description = "Dados inválidos ou produto já existente"
     )
-    @PreAuthorize("hasRole('ADMIN')")
+    @ApiResponse(
+        responseCode = "403",
+        description = "Acesso negado - apenas administradores"
+    )
     public ResponseEntity<ProductDTO> createProduct(@Valid @RequestBody ProductRequest request) {
         return new ResponseEntity<>(productService.createProduct(request), HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     @Operation(
-        summary = "Atualizar produto existente",
-        description = "Atualiza os detalhes de um produto existente a partir do ID fornecido"
+        summary = "Atualizar produto",
+        description = "Atualiza um produto existente na loja"
     )
     @ApiResponse(
         responseCode = "200",
@@ -135,12 +138,18 @@ public class ProductController {
         responseCode = "404",
         description = "Produto não encontrado"
     )
-    @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<ProductDTO> updateProduct(@PathVariable UUID id, @Valid @RequestBody ProductRequest request) {
+    @ApiResponse(
+        responseCode = "403",
+        description = "Acesso negado - apenas administradores"
+    )
+    public ResponseEntity<ProductDTO> updateProduct(
+            @Parameter(description = "Product ID") @PathVariable Long id,
+            @Valid @RequestBody ProductRequest request) {
         return ResponseEntity.ok(productService.updateProduct(id, request));
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     @Operation(
         summary = "Deletar produto existente",
         description = "Deleta um produto existente a partir do ID fornecido"
@@ -153,8 +162,12 @@ public class ProductController {
         responseCode = "404",
         description = "Produto não encontrado"
     )
-    @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<Void> deleteProduct(@PathVariable UUID id) {
+    @ApiResponse(
+        responseCode = "403",
+        description = "Acesso negado - apenas administradores"
+    )
+    public ResponseEntity<Void> deleteProduct(
+            @Parameter(description = "Product ID") @PathVariable Long id) {
         productService.deleteProduct(id);
         return ResponseEntity.noContent().build();
     }

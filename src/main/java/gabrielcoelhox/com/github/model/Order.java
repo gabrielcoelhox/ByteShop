@@ -9,7 +9,6 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 @Entity
 @Table(name = "orders")
@@ -19,8 +18,8 @@ import java.util.UUID;
 public class Order {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private UUID id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
@@ -36,7 +35,7 @@ public class Order {
     private OrderStatus status;
 
     @Column(nullable = false)
-    private BigDecimal totalAmount;
+    private BigDecimal totalAmount = BigDecimal.ZERO;
 
     @Column(nullable = false)
     private LocalDateTime createdAt;
@@ -51,6 +50,9 @@ public class Order {
     protected void onCreate() {
         createdAt = LocalDateTime.now();
         status = OrderStatus.PENDING;
+        if (totalAmount == null) {
+            totalAmount = BigDecimal.ZERO;
+        }
     }
 
     // calcula o valor total do pedido somando o preço de cada item multiplicado pela quantidade
@@ -64,10 +66,12 @@ public class Order {
     public void addItem(OrderItem item) {
         items.add(item);
         item.setOrder(this);
+        calculateTotalAmount();
     }
 
     public void removeItem(OrderItem item) {
         items.remove(item);
         item.setOrder(null);
+        calculateTotalAmount();
     }
 }

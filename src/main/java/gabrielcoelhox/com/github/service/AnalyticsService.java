@@ -9,12 +9,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
-import java.nio.ByteBuffer;
 import java.time.LocalDateTime;
 import java.time.YearMonth;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -32,20 +30,7 @@ public class AnalyticsService {
         List<TopUserDTO> topUsers = new ArrayList<>();
 
         for (Object[] result : results) {
-            // O ID vem como um array de bytes do banco de dados
-            UUID userId;
-            if (result[0] instanceof byte[]) {
-                // Converter de array de bytes para UUID
-                byte[] bytes = (byte[]) result[0];
-                userId = bytesToUUID(bytes);
-            } else if (result[0] instanceof String) {
-                // Se já for uma string, faz o parse para UUID
-                userId = UUID.fromString((String) result[0]);
-            } else {
-                // Se for diretamente um UUID (improvável em consulta nativa)
-                userId = (UUID) result[0];
-            }
-            
+            Long userId = ((Number) result[0]).longValue();
             String name = (String) result[1];
             String email = (String) result[2];
             Long orderCount = (Long) result[3];
@@ -64,20 +49,7 @@ public class AnalyticsService {
         List<AverageOrderValueDTO> averageValues = new ArrayList<>();
 
         for (Object[] result : results) {
-            // O ID vem como um array de bytes do banco de dados
-            UUID userId;
-            if (result[0] instanceof byte[]) {
-                // Converter de array de bytes para UUID
-                byte[] bytes = (byte[]) result[0];
-                userId = bytesToUUID(bytes);
-            } else if (result[0] instanceof String) {
-                // Se já for uma string, faz o parse para UUID
-                userId = UUID.fromString((String) result[0]);
-            } else {
-                // Se for diretamente um UUID (improvável em consulta nativa)
-                userId = (UUID) result[0];
-            }
-            
+            Long userId = ((Number) result[0]).longValue();
             String name = (String) result[1];
             String email = (String) result[2];
             BigDecimal averageOrderValue = (BigDecimal) result[3];
@@ -101,13 +73,5 @@ public class AnalyticsService {
             totalRevenue = BigDecimal.ZERO;
         }
         return new MonthlyRevenueDTO(year, month, totalRevenue);
-    }
-
-    // Método auxiliar para converter bytes para UUID
-    private UUID bytesToUUID(byte[] bytes) {
-        ByteBuffer byteBuffer = ByteBuffer.wrap(bytes);
-        long high = byteBuffer.getLong();
-        long low = byteBuffer.getLong();
-        return new UUID(high, low);
     }
 }

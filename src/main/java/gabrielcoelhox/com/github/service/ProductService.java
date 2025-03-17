@@ -11,8 +11,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.List;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -32,10 +32,10 @@ public class ProductService {
                 .collect(Collectors.toList());
     }
 
-    public ProductDTO getProductById(UUID id) {
+    public ProductDTO getProductById(Long id) {
         return productRepository.findById(id)
                 .map(this::mapToDTO)
-                .orElseThrow(() -> new EntityNotFoundException("Product not found with id: " + id));
+                .orElseThrow(() -> new EntityNotFoundException("Produto não encontrado com o id: " + id));
     }
 
     public List<ProductDTO> getProductsByCategory(String category) {
@@ -63,9 +63,9 @@ public class ProductService {
     }
 
     @Transactional
-    public ProductDTO updateProduct(UUID id, ProductRequest request) {
+    public ProductDTO updateProduct(Long id, ProductRequest request) {
         Product product = productRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Product not found with id: " + id));
+                .orElseThrow(() -> new EntityNotFoundException("Produto não encontrado com o id: " + id));
 
         product.setName(request.getName());
         product.setDescription(request.getDescription());
@@ -77,32 +77,32 @@ public class ProductService {
     }
 
     @Transactional
-    public void deleteProduct(UUID id) {
+    public void deleteProduct(Long id) {
         if (!productRepository.existsById(id)) {
-            throw new EntityNotFoundException("Product not found with id: " + id);
+            throw new EntityNotFoundException("Produto não encontrado com o id: " + id);
         }
 
         productRepository.deleteById(id);
     }
 
     @Transactional
-    public void updateStock(UUID productId, int quantity) {
+    public void updateStock(Long productId, int quantity) {
         Product product = productRepository.findById(productId)
-                .orElseThrow(() -> new EntityNotFoundException("Product not found with id: " + productId));
+                .orElseThrow(() -> new EntityNotFoundException("Produto não encontrado com o id: " + productId));
 
         int newStock = product.getStockQuantity() - quantity;
 
         if (newStock < 0) {
-            throw new IllegalStateException("Not enough stock for product: " + product.getName());
+            throw new IllegalStateException("Estoque insuficiente para o produto: " + product.getName());
         }
 
         product.setStockQuantity(newStock);
         productRepository.save(product);
     }
 
-    public boolean hasEnoughStock(UUID productId, int quantity) {
+    public boolean hasEnoughStock(Long productId, int quantity) {
         Product product = productRepository.findById(productId)
-                .orElseThrow(() -> new EntityNotFoundException("Product not found with id: " + productId));
+                .orElseThrow(() -> new EntityNotFoundException("Produto não encontrado com o id: " + productId));
 
         return product.getStockQuantity() >= quantity;
     }

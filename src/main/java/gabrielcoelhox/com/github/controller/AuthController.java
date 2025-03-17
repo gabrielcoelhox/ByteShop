@@ -1,12 +1,10 @@
 package gabrielcoelhox.com.github.controller;
 
-import gabrielcoelhox.com.github.dto.auth.AuthRequest;
-import gabrielcoelhox.com.github.dto.auth.AuthResponse;
+import gabrielcoelhox.com.github.dto.auth.AuthenticationRequest;
+import gabrielcoelhox.com.github.dto.auth.AuthenticationResponse;
 import gabrielcoelhox.com.github.dto.auth.RegisterRequest;
 import gabrielcoelhox.com.github.service.AuthService;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -20,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/auth")
 @RequiredArgsConstructor
-@Tag(name = "Autenticação", description = "Operações de autenticação e registro")
+@Tag(name = "Autenticação", description = "Endpoints de autenticação e registro")
 public class AuthController {
 
     private final AuthService authService;
@@ -39,7 +37,7 @@ public class AuthController {
         responseCode = "400", 
         description = "Dados inválidos ou usuário já existente"
     )
-    public ResponseEntity<AuthResponse> register(@Valid @RequestBody RegisterRequest request) {
+    public ResponseEntity<AuthenticationResponse> register(@Valid @RequestBody RegisterRequest request) {
         return ResponseEntity.ok(authService.register(request));
     }
 
@@ -57,7 +55,7 @@ public class AuthController {
         responseCode = "403", 
         description = "Credenciais inválidas"
     )
-    public ResponseEntity<AuthResponse> authenticate(@Valid @RequestBody AuthRequest request) {
+    public ResponseEntity<AuthenticationResponse> authenticate(@Valid @RequestBody AuthenticationRequest request) {
         return ResponseEntity.ok(authService.authenticate(request));
     }
 }

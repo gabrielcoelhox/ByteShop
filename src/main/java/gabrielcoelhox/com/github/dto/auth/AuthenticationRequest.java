@@ -1,17 +1,15 @@
 package gabrielcoelhox.com.github.dto.auth;
 
-import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@NoArgsConstructor
+@Builder
 @AllArgsConstructor
-public class AuthRequest {
-    @NotBlank(message = "Username is required")
+@NoArgsConstructor
+public class AuthenticationRequest {
     private String username;
-
-    @NotBlank(message = "Password is required")
     private String password;
-}
+} 
