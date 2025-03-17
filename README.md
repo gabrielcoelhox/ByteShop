@@ -265,28 +265,28 @@ Este tutorial mostra como configurar, monitorar e testar o projeto ByteShop usan
 
 ### 1. Configuração do MySQL
 
-1. **Instale o MySQL** (caso ainda não tenha):
+1.1 **Instale o MySQL** (caso ainda não tenha):
    - Windows: Baixe em https://dev.mysql.com/downloads/installer/ e siga o assistente
    - Linux (Ubuntu): `sudo apt install mysql-server`
    - macOS: `brew install mysql` (necessário Homebrew)
 
-2. **Inicie o serviço MySQL**:
+1.2 **Inicie o serviço MySQL**:
    - Windows: Verifique se o serviço está rodando pelo Gerenciador de Serviços
    - Linux: `sudo systemctl start mysql`
    - macOS: `brew services start mysql`
 
-3. **Acesse o MySQL**:
+1.3 **Acesse o MySQL**:
    ```bash
    mysql -u root -p
    # Digite sua senha quando solicitado
    ```
 
-4. **Crie um banco de dados para o projeto**:
+1.4 **Crie um banco de dados para o projeto**:
    ```sql
    CREATE DATABASE byteshop;
    ```
 
-5. **Crie um usuário dedicado para o projeto** (opcional, mas recomendado):
+1.5 **Crie um usuário dedicado para o projeto** (opcional, mas recomendado):
    ```sql
    CREATE USER 'byteshop_user'@'localhost' IDENTIFIED BY 'sua_senha';
    GRANT ALL PRIVILEGES ON byteshop.* TO 'byteshop_user'@'localhost';
@@ -295,7 +295,7 @@ Este tutorial mostra como configurar, monitorar e testar o projeto ByteShop usan
 
 ### 2. Configure o Projeto para Usar MySQL
 
-1. **Edite o arquivo de configuração** em `src/main/resources/application.properties`:
+2.1 **Edite o arquivo de configuração** em `src/main/resources/application.properties`:
    ```properties
    # Conexão com MySQL
    spring.datasource.url=jdbc:mysql://localhost:3306/byteshop?createDatabaseIfNotExist=true&useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true&characterEncoding=UTF-8
@@ -313,7 +313,7 @@ Este tutorial mostra como configurar, monitorar e testar o projeto ByteShop usan
    spring.sql.init.mode=never
    ```
 
-2. **Execute o projeto**:
+2.2 **Execute o projeto**:
    ```bash
    mvn clean spring-boot:run
    ```
@@ -321,18 +321,18 @@ Este tutorial mostra como configurar, monitorar e testar o projeto ByteShop usan
 
 ### 3. Verifique as Tabelas Criadas
 
-1. **Conecte-se ao MySQL**:
+3.1 **Conecte-se ao MySQL**:
    ```bash
    mysql -u byteshop_user -p byteshop
    ```
 
-2. **Liste as tabelas**:
+3.2 **Liste as tabelas**:
    ```sql
    SHOW TABLES;
    ```
    Você deverá ver as tabelas: `users`, `products`, `orders`, `order_items`
 
-3. **Explore a estrutura das tabelas**:
+3.3 **Explore a estrutura das tabelas**:
    ```sql
    DESCRIBE users;
    DESCRIBE products;
@@ -340,26 +340,26 @@ Este tutorial mostra como configurar, monitorar e testar o projeto ByteShop usan
    DESCRIBE order_items;
    ```
 
-4. **Consulte e Analise os Dados
+### 4. Consulte e Analise os Dados
 
-1. **Verifique os usuários**:
+4.1 **Verifique os usuários**:
    ```sql
    SELECT id, username, name, email, role FROM users;
    ```
 
-2. **Verifique os produtos**:
+4.2 **Verifique os produtos**:
    ```sql
    SELECT id, name, price, category, stock_quantity FROM products;
    ```
 
-3. **Verifique os pedidos**:
+4.3 **Verifique os pedidos**:
    ```sql
    SELECT o.id, o.user_id, u.username, o.status, o.total_amount, o.created_at, o.paid_at
    FROM orders o
    JOIN users u ON o.user_id = u.id;
    ```
 
-4. **Verifique os itens de um pedido específico**:
+4.4 **Verifique os itens de um pedido específico**:
    ```sql
    -- Substitua 'ID_DO_PEDIDO' pelo ID real de um pedido
    SELECT oi.order_id, oi.product_id, p.name, oi.quantity, oi.price, (oi.quantity * oi.price) as subtotal
@@ -368,11 +368,11 @@ Este tutorial mostra como configurar, monitorar e testar o projeto ByteShop usan
    WHERE oi.order_id = 'ID_DO_PEDIDO';
    ```
 
-5. *Teste as Consultas Otimizadas*
+### 5. Teste as Consultas Otimizadas
 
 Teste as mesmas consultas otimizadas implementadas na aplicação:
 
-1. **Top 5 usuários que mais gastaram**:
+5.1 **Top 5 usuários que mais gastaram**:
 
 Se quiser visualizar outro status, altere o campo PAID para `PENDING` ou `CANCELED`
    ```sql
@@ -385,7 +385,8 @@ Se quiser visualizar outro status, altere o campo PAID para `PENDING` ou `CANCEL
    LIMIT 5;
    ```
 
-2. **Valor médio dos pedidos por usuário**:
+5.2 **Valor médio dos pedidos por usuário**:
+
 Se quiser visualizar outro status, altere o campo PAID para `PENDING` ou `CANCELED`
    ```sql
    SELECT u.id, u.name, u.email, AVG(o.total_amount) as average_order_value 
@@ -395,7 +396,8 @@ Se quiser visualizar outro status, altere o campo PAID para `PENDING` ou `CANCEL
    GROUP BY u.id, u.name, u.email;
    ```
 
-3. **Faturamento mensal** (substitua ANO e MÊS pelos valores desejados):
+5.3 **Faturamento mensal** (substitua ANO e MÊS pelos valores desejados):
+
 Se quiser visualizar outro status, altere o campo PAID para `PENDING` ou `CANCELED`
    ```sql
    SELECT SUM(total_amount) as revenue
@@ -405,15 +407,15 @@ Se quiser visualizar outro status, altere o campo PAID para `PENDING` ou `CANCEL
    # Substitua o campo ANO e MÊS pelos valores que deseja realizar a pesquisa
    ```
 
-4. **Monitore Operações em Tempo Real
+### 6. Monitore Operações em Tempo Real
 
-5. **Ative o log de consultas** (opcional):
+6.1 **Ative o log de consultas** (opcional):
    ```sql
    SET GLOBAL general_log = 'ON';
    SET GLOBAL log_output = 'TABLE';
    ```
 
-6. **Visualize as consultas recentes**:
+6.2 **Visualize as consultas recentes**:
    ```sql
    SELECT event_time, command_type, argument 
    FROM mysql.general_log 
@@ -421,27 +423,27 @@ Se quiser visualizar outro status, altere o campo PAID para `PENDING` ou `CANCEL
    LIMIT 20;
    ```
 
-7. **Execute operações na API** usando o Swagger ou outras ferramentas e observe as consultas correspondentes no log.
+### 7. Teste Transações e Integridade de Dados
 
-8. *Teste Transações e Integridade de Dados*
+7.1 **Execute operações na API** usando o Swagger ou outras ferramentas e observe as consultas correspondentes no log.
 
-9.  **Crie um novo pedido** via Swagger (veja o tutorial anterior)
+7.2  **Crie um novo pedido** via Swagger (veja o tutorial anterior)
 
-10. **Verifique se o pedido foi criado no banco**:
+7.3 **Verifique se o pedido foi criado no banco**:
    ```sql
    SELECT * FROM orders ORDER BY created_at DESC LIMIT 1;
    SELECT * FROM order_items WHERE order_id = 'ID_DO_PEDIDO_CRIADO';
    ```
 
-11. *Processe o pagamento do pedido** via Swagger
+7.4 *Processe o pagamento do pedido* via Swagger
 
-12. **Verifique se o estoque foi atualizado**:
+7.5 **Verifique se o estoque foi atualizado**:
    ```sql
    SELECT name, stock_quantity FROM products WHERE id IN 
    (SELECT product_id FROM order_items WHERE order_id = 'ID_DO_PEDIDO_PAGO');
    ```
 
-13. *Dicas e Solução de Problemas*
+### 8. Dicas e Solução de Problemas
 
 - **Falha na conexão**: Verifique se o serviço MySQL está rodando (`sudo systemctl status mysql`)
 - **Erro de acesso**: Confirme nome de usuário e senha no `application.properties`
